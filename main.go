@@ -17,9 +17,9 @@ func main() {
 
 	// Koneksi ke database
 	db := config.ConnectDatabase()
-config.MigrateDatabase(db)
+	config.MigrateDatabase(db)
 
-config.SeedAdminUser(db)
+	config.SeedAdminUser(db)
 	// Inisialisasi router
 	router := gin.Default()
 

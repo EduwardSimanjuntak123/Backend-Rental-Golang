@@ -119,7 +119,7 @@ func GetVendorTransactions(c *gin.Context) {
 
 		// Ambil detail motor (pastikan field sesuai model Motor)
 		var motor models.Motor
-		if err := config.DB.Select("id, name, brand, year, price").Where("id = ?", t.MotorID).First(&motor).Error; err != nil {
+		if err := config.DB.Select("id, name, brand, year, price, platmotor").Where("id = ?", t.MotorID).First(&motor).Error; err != nil {
 			motor = models.Motor{}
 		}
 
@@ -146,7 +146,7 @@ func GetVendorTransactions(c *gin.Context) {
 				"brand":         motor.Brand,
 				"year":          motor.Year,
 				"price_per_day": motor.Price,
-				"plat_motor": motor.PlatMotor,
+				"plat_motor":    motor.PlatMotor,
 			},
 		}
 		response = append(response, resp)
@@ -154,19 +154,3 @@ func GetVendorTransactions(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
-
-
-// func CalculateTotalPrice(motorID uint, startDate, endDate time.Time) float64 {
-// 	// Contoh perhitungan harga, ini bisa disesuaikan dengan aturan harga motor
-// 	var motor models.Motor
-// 	var motor Motor // Merujuk ke struct Motor dalam paket yang sama
-// 	if err := config.DB.Where("id = ?", motorID).First(&motor).Error; err != nil {
-// 		log.Printf("Motor tidak ditemukan: %v", err)
-// 		return 0
-// 	}
-
-// 	// Hitung durasi rental dalam hari
-// 	duration := endDate.Sub(startDate).Hours() / 24
-// 	totalPrice := duration * float64(motor.Price)
-// 	return totalPrice
-// }
