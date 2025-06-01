@@ -89,27 +89,8 @@ func CreateBooking(c *gin.Context) {
 
 	// Hitung tanggal mulai & selesai
 	// Perlakukan input UTC seolah-olah dikirim sebagai WIB
-	loc, err := time.LoadLocation("Asia/Jakarta")
-	if err != nil {
-		log.Printf("[ERROR] Failed to load Asia/Jakarta location: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Gagal memuat zona waktu",
-		})
-		return
-	}
 
-	startDateWIB := time.Date(
-		bookingInput.StartDate.Year(),
-		bookingInput.StartDate.Month(),
-		bookingInput.StartDate.Day(),
-		bookingInput.StartDate.Hour(),
-		bookingInput.StartDate.Minute(),
-		bookingInput.StartDate.Second(),
-		bookingInput.StartDate.Nanosecond(),
-		loc,
-	)
-
-	startDateUTC := startDateWIB.UTC()
+	startDateUTC := bookingInput.StartDate.UTC()
 	endDateUTC := startDateUTC.Add(time.Duration(bookingInput.Duration*24) * time.Hour)
 
 	if err := checkBookingConflict(startDateUTC, endDateUTC, bookingInput.MotorID); err != nil {
